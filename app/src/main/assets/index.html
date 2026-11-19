@@ -1,129 +1,469 @@
+
 <!DOCTYPE html>
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#101d35">
+
 <title>NoboDhara – Seller Profit Calculator</title>
+
 <style>
-:root{--navy:#101d35;--navy2:#1b2d4d;--gold:#e7b94f;--bg:#f3f5f9;--muted:#6b7280;--line:#e5e9f0;--green:#12805c}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:#182235;font-family:Inter,"Noto Sans Bengali",system-ui,-apple-system,"Segoe UI",sans-serif}
-.wrap{max-width:760px;margin:0 auto;padding:22px 16px 40px}
-header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:white;padding:24px;border-radius:20px;box-shadow:0 12px 30px #14213b22}
-.brand{font-size:13px;letter-spacing:2px;color:var(--gold);font-weight:800}
-h1{font-size:25px;margin:7px 0 5px}
-.sub{color:#d2d9e5;font-size:13px}
-.panel{background:white;border:1px solid var(--line);border-radius:18px;padding:20px;margin-top:16px;box-shadow:0 5px 18px #18223508}
-.section-title{font-size:16px;font-weight:800;margin:0 0 16px;color:var(--navy)}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-label{display:block;font-size:13px;font-weight:700;margin-bottom:7px;color:#344054}
-.input-wrap{position:relative}
-input{width:100%;border:1px solid #d7deea;border-radius:11px;padding:13px 44px 13px 13px;font-size:16px;outline:none;background:#fff;color:#182235}
-input:focus{border-color:#b58b2d;box-shadow:0 0 0 3px #e7b94f30}
-.suffix{position:absolute;right:13px;top:50%;transform:translateY(-50%);color:#7b8494;font-size:13px;font-weight:700;pointer-events:none}
-.hint{font-size:11px;color:var(--muted);margin-top:5px}
-.results{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.metric{background:#f8f9fc;border:1px solid var(--line);padding:13px;border-radius:13px;min-width:0}
-.metric .name{font-size:12px;color:#697386;margin-bottom:7px}
-.metric .value{font-size:18px;font-weight:800;color:var(--navy);overflow-wrap:anywhere}
-.metric.highlight{background:#edf8f3;border-color:#ccebdd}
-.metric.highlight .value{font-size:23px;color:var(--green)}
-.metric.profit{background:#fff9e9;border-color:#f3e3b8}
-.metric.profit .value{color:#946b12}
-.full{grid-column:1/-1}
-.formula{font-size:12px;color:#697386;line-height:1.65;background:#f8f9fc;padding:12px;border-radius:10px;margin-top:14px}
-.actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
-button{border:0;border-radius:11px;padding:12px 16px;font-size:14px;font-weight:800;cursor:pointer}
-.primary{background:var(--navy);color:white;flex:1}
-.secondary{background:#eef1f6;color:#27354b}
-button:active{transform:translateY(1px)}
-.note{font-size:11px;color:var(--muted);text-align:center;margin:18px 0 0}
-.error{display:none;color:#b42318;background:#fff1f0;border:1px solid #ffd2ce;padding:10px 12px;border-radius:10px;font-size:12px;margin-top:12px}
-@media(max-width:520px){.wrap{padding:14px 12px 28px}header{padding:20px}h1{font-size:22px}.panel{padding:16px}.grid{gap:11px}.metric .value{font-size:16px}.metric.highlight .value{font-size:21px}}
-@media(max-width:360px){.grid,.results{grid-template-columns:1fr}.full{grid-column:auto}}
+:root{
+  --navy:#101d35;
+  --navy2:#1b2d4d;
+  --gold:#e7b94f;
+  --bg:#f3f5f9;
+  --muted:#6b7280;
+  --line:#e5e9f0;
+  --green:#12805c;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:#182235;
+  font-family:Inter,"Noto Sans Bengali",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+
+.wrap{
+  max-width:760px;
+  margin:0 auto;
+  padding:22px 16px 40px;
+}
+
+header{
+  background:linear-gradient(135deg,var(--navy),var(--navy2));
+  color:white;
+  padding:24px;
+  border-radius:20px;
+  box-shadow:0 12px 30px #14213b22;
+}
+
+/* NoboDhara Logo Header */
+.brand-row{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-bottom:12px;
+}
+
+.brand-logo{
+  width:68px;
+  height:68px;
+  object-fit:contain;
+  border-radius:14px;
+  background:#fff;
+}
+
+.brand-name{
+  font-size:17px;
+  letter-spacing:2px;
+  color:var(--gold);
+  font-weight:800;
+}
+
+h1{
+  font-size:25px;
+  margin:7px 0 5px;
+}
+
+.sub{
+  color:#d2d9e5;
+  font-size:13px;
+}
+
+.panel{
+  background:white;
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:20px;
+  margin-top:16px;
+  box-shadow:0 5px 18px #18223508;
+}
+
+.section-title{
+  font-size:16px;
+  font-weight:800;
+  margin:0 0 16px;
+  color:var(--navy);
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+label{
+  display:block;
+  font-size:13px;
+  font-weight:700;
+  margin-bottom:7px;
+  color:#344054;
+}
+
+.input-wrap{
+  position:relative;
+}
+
+input{
+  width:100%;
+  border:1px solid #d7deea;
+  border-radius:11px;
+  padding:13px 44px 13px 13px;
+  font-size:16px;
+  outline:none;
+  background:#fff;
+  color:#182235;
+}
+
+input:focus{
+  border-color:#b58b2d;
+  box-shadow:0 0 0 3px #e7b94f30;
+}
+
+.suffix{
+  position:absolute;
+  right:13px;
+  top:50%;
+  transform:translateY(-50%);
+  color:#7b8494;
+  font-size:13px;
+  font-weight:700;
+  pointer-events:none;
+}
+
+.hint{
+  font-size:11px;
+  color:var(--muted);
+  margin-top:5px;
+}
+
+.results{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.metric{
+  background:#f8f9fc;
+  border:1px solid var(--line);
+  padding:13px;
+  border-radius:13px;
+  min-width:0;
+}
+
+.metric .name{
+  font-size:12px;
+  color:#697386;
+  margin-bottom:7px;
+}
+
+.metric .value{
+  font-size:18px;
+  font-weight:800;
+  color:var(--navy);
+  overflow-wrap:anywhere;
+}
+
+.metric.highlight{
+  background:#edf8f3;
+  border-color:#ccebdd;
+}
+
+.metric.highlight .value{
+  font-size:23px;
+  color:var(--green);
+}
+
+.metric.profit{
+  background:#fff9e9;
+  border-color:#f3e3b8;
+}
+
+.metric.profit .value{
+  color:#946b12;
+}
+
+.full{
+  grid-column:1/-1;
+}
+
+.formula{
+  font-size:12px;
+  color:#697386;
+  line-height:1.65;
+  background:#f8f9fc;
+  padding:12px;
+  border-radius:10px;
+  margin-top:14px;
+}
+
+.actions{
+  display:flex;
+  gap:10px;
+  margin-top:16px;
+  flex-wrap:wrap;
+}
+
+button{
+  border:0;
+  border-radius:11px;
+  padding:12px 16px;
+  font-size:14px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.primary{
+  background:var(--navy);
+  color:white;
+  flex:1;
+}
+
+.secondary{
+  background:#eef1f6;
+  color:#27354b;
+}
+
+button:active{
+  transform:translateY(1px);
+}
+
+.note{
+  font-size:11px;
+  color:var(--muted);
+  text-align:center;
+  margin:18px 0 0;
+}
+
+.error{
+  display:none;
+  color:#b42318;
+  background:#fff1f0;
+  border:1px solid #ffd2ce;
+  padding:10px 12px;
+  border-radius:10px;
+  font-size:12px;
+  margin-top:12px;
+}
+
+@media(max-width:520px){
+  .wrap{
+    padding:14px 12px 28px;
+  }
+
+  header{
+    padding:20px;
+  }
+
+  h1{
+    font-size:22px;
+  }
+
+  .panel{
+    padding:16px;
+  }
+
+  .grid{
+    gap:11px;
+  }
+
+  .metric .value{
+    font-size:16px;
+  }
+
+  .metric.highlight .value{
+    font-size:21px;
+  }
+}
+
+@media(max-width:360px){
+  .grid,.results{
+    grid-template-columns:1fr;
+  }
+
+  .full{
+    grid-column:auto;
+  }
+}
 </style>
 </head>
+
 <body>
+
 <div class="wrap">
+
 <header>
-  <div class="brand">NOBODHARA</div>
+  <div class="brand-row">
+    <img src="logo.png" alt="NoboDhara Logo" class="brand-logo">
+    <div class="brand-name">NOBODHARA</div>
+  </div>
+
   <h1>Seller Profit Calculator</h1>
-  <div class="sub">সহজে হিসাব করুন পণ্যের খরচ, ফি ও প্রকৃত লাভ</div>
+
+  <div class="sub">
+    সহজে হিসাব করুন পণ্যের খরচ, ফি ও প্রকৃত লাভ
+  </div>
 </header>
 
 <section class="panel">
+
   <h2 class="section-title">আপনার পণ্যের তথ্য দিন</h2>
+
   <div class="grid">
+
     <div>
       <label for="cost">Cost Price</label>
-      <div class="input-wrap"><input id="cost" type="number" min="0" step="0.01" value="500" inputmode="decimal"><span class="suffix">৳</span></div>
+      <div class="input-wrap">
+        <input id="cost" type="number" min="0" step="0.01" value="500" inputmode="decimal">
+        <span class="suffix">৳</span>
+      </div>
       <div class="hint">পণ্যের ক্রয়মূল্য</div>
     </div>
+
     <div>
       <label for="fee">Cartup Fee</label>
-      <div class="input-wrap"><input id="fee" type="number" min="0" max="99.99" step="0.01" value="5" inputmode="decimal"><span class="suffix">%</span></div>
+      <div class="input-wrap">
+        <input id="fee" type="number" min="0" max="99.99" step="0.01" value="5" inputmode="decimal">
+        <span class="suffix">%</span>
+      </div>
       <div class="hint">Selling Price-এর ওপর</div>
     </div>
+
     <div>
       <label for="campaign">Campaign Charge</label>
-      <div class="input-wrap"><input id="campaign" type="number" min="0" max="99.99" step="0.01" value="3" inputmode="decimal"><span class="suffix">%</span></div>
+      <div class="input-wrap">
+        <input id="campaign" type="number" min="0" max="99.99" step="0.01" value="3" inputmode="decimal">
+        <span class="suffix">%</span>
+      </div>
       <div class="hint">Selling Price-এর ওপর</div>
     </div>
+
     <div>
       <label for="profitRate">Expected Profit</label>
-      <div class="input-wrap"><input id="profitRate" type="number" min="0" step="0.01" value="20" inputmode="decimal"><span class="suffix">%</span></div>
+      <div class="input-wrap">
+        <input id="profitRate" type="number" min="0" step="0.01" value="20" inputmode="decimal">
+        <span class="suffix">%</span>
+      </div>
       <div class="hint">Cost Price-এর ওপর</div>
     </div>
+
   </div>
+
   <div class="error" id="error" role="alert"></div>
+
 </section>
 
 <section class="panel">
+
   <h2 class="section-title">হিসাবের ফলাফল</h2>
+
   <div class="results" aria-live="polite">
-    <div class="metric"><div class="name">Cost Price</div><div class="value" id="rCost">৳500.00</div></div>
-    <div class="metric profit"><div class="name">Expected Profit</div><div class="value" id="rExpected">৳100.00</div></div>
-    <div class="metric"><div class="name">Cartup Fee Amount</div><div class="value" id="rFee">৳32.61</div></div>
-    <div class="metric"><div class="name">Campaign Amount</div><div class="value" id="rCampaign">৳19.57</div></div>
-    <div class="metric full"><div class="name">Total Cost Including Fees</div><div class="value" id="rTotal">৳552.17</div></div>
-    <div class="metric highlight full"><div class="name">Final Product Selling Price</div><div class="value" id="rSelling">৳652.17</div></div>
-    <div class="metric profit full"><div class="name">Net Profit</div><div class="value" id="rNet">৳100.00</div></div>
+
+    <div class="metric">
+      <div class="name">Cost Price</div>
+      <div class="value" id="rCost">৳500.00</div>
+    </div>
+
+    <div class="metric profit">
+      <div class="name">Expected Profit</div>
+      <div class="value" id="rExpected">৳100.00</div>
+    </div>
+
+    <div class="metric">
+      <div class="name">Cartup Fee Amount</div>
+      <div class="value" id="rFee">৳32.61</div>
+    </div>
+
+    <div class="metric">
+      <div class="name">Campaign Amount</div>
+      <div class="value" id="rCampaign">৳19.57</div>
+    </div>
+
+    <div class="metric full">
+      <div class="name">Total Cost Including Fees</div>
+      <div class="value" id="rTotal">৳552.17</div>
+    </div>
+
+    <div class="metric highlight full">
+      <div class="name">Final Product Selling Price</div>
+      <div class="value" id="rSelling">৳652.17</div>
+    </div>
+
+    <div class="metric profit full">
+      <div class="name">Net Profit</div>
+      <div class="value" id="rNet">৳100.00</div>
+    </div>
+
   </div>
+
   <div class="formula">
     <strong>হিসাবের নিয়ম:</strong><br>
     Expected Profit = Cost Price × Profit %<br>
     Selling Price = (Cost Price + Expected Profit) ÷ (1 − (Cartup Fee + Campaign %) ÷ 100)<br>
     Cartup Fee ও Campaign Charge — দুটিই Selling Price-এর ওপর হিসাব করা হয়।
   </div>
+
   <div class="actions">
     <button class="primary" id="copyBtn">ফলাফল কপি করুন</button>
     <button class="secondary" id="resetBtn">রিসেট</button>
   </div>
+
 </section>
-<p class="note">NoboDhara · Seller Profit Calculator · হিসাব আপনার ডিভাইসেই সম্পন্ন হয়</p>
+
+<p class="note">
+  NoboDhara · Seller Profit Calculator · হিসাব আপনার ডিভাইসেই সম্পন্ন হয়
+</p>
+
 </div>
+
 <script>
 const ids=['cost','fee','campaign','profitRate'];
+
 const $=id=>document.getElementById(id);
-const money=n=>'৳'+n.toLocaleString('en-BD',{minimumFractionDigits:2,maximumFractionDigits:2});
+
+const money=n=>'৳'+n.toLocaleString('en-BD',{
+  minimumFractionDigits:2,
+  maximumFractionDigits:2
+});
+
 let lastText='';
+
 function calculate(){
+
   const [c,f,m,p]=ids.map(id=>Number($(id).value));
   const err=$('error');
-  if(ids.some(id=>$(id).value.trim()==='') || [c,f,m,p].some(v=>!Number.isFinite(v)||v<0)){
-    err.textContent='অনুগ্রহ করে সব ঘরে শূন্য বা তার বেশি সঠিক সংখ্যা লিখুন।';err.style.display='block';return;
+
+  if(ids.some(id=>$(id).value.trim()==='') ||
+     [c,f,m,p].some(v=>!Number.isFinite(v)||v<0)){
+
+    err.textContent='অনুগ্রহ করে সব ঘরে শূন্য বা তার বেশি সঠিক সংখ্যা লিখুন।';
+    err.style.display='block';
+    return;
   }
+
   if(f+m>=100){
-    err.textContent='Cartup Fee এবং Campaign Charge-এর যোগফল ১০০%-এর কম হতে হবে।';err.style.display='block';return;
+
+    err.textContent='Cartup Fee এবং Campaign Charge-এর যোগফল ১০০%-এর কম হতে হবে।';
+    err.style.display='block';
+    return;
   }
+
   err.style.display='none';
+
   const expected=c*p/100;
   const selling=(c+expected)/(1-(f+m)/100);
   const fee=selling*f/100;
   const campaign=selling*m/100;
   const total=c+fee+campaign;
   const net=selling-total;
+
   $('rCost').textContent=money(c);
   $('rExpected').textContent=money(expected);
   $('rFee').textContent=money(fee);
@@ -131,6 +471,7 @@ function calculate(){
   $('rTotal').textContent=money(total);
   $('rSelling').textContent=money(selling);
   $('rNet').textContent=money(net);
+
   lastText=`NoboDhara – Seller Profit Calculator
 Cost Price: ${money(c)}
 Cartup Fee (${f}%): ${money(fee)}
@@ -140,16 +481,49 @@ Expected Profit (${p}% of Cost Price): ${money(expected)}
 Final Selling Price: ${money(selling)}
 Net Profit: ${money(net)}`;
 }
+
 ids.forEach(id=>$(id).addEventListener('input',calculate));
-$('resetBtn').addEventListener('click',()=>{ $('cost').value='';$('fee').value='';$('campaign').value='';$('profitRate').value='';calculate();$('cost').focus();});
-$('copyBtn').addEventListener('click',async()=>{
-  if(!lastText){calculate();if(!lastText)return;}
-  const btn=$('copyBtn');
-  try{await navigator.clipboard.writeText(lastText);btn.textContent='কপি হয়েছে ✓';}
-  catch(e){const ta=document.createElement('textarea');ta.value=lastText;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();btn.textContent='কপি হয়েছে ✓';}
-  setTimeout(()=>btn.textContent='ফলাফল কপি করুন',1800);
+
+$('resetBtn').addEventListener('click',()=>{
+  $('cost').value='';
+  $('fee').value='';
+  $('campaign').value='';
+  $('profitRate').value='';
+  calculate();
+  $('cost').focus();
 });
+
+$('copyBtn').addEventListener('click',async()=>{
+
+  if(!lastText){
+    calculate();
+    if(!lastText)return;
+  }
+
+  const btn=$('copyBtn');
+
+  try{
+    await navigator.clipboard.writeText(lastText);
+    btn.textContent='কপি হয়েছে ✓';
+  }
+  catch(e){
+    const ta=document.createElement('textarea');
+    ta.value=lastText;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    ta.remove();
+    btn.textContent='কপি হয়েছে ✓';
+  }
+
+  setTimeout(()=>{
+    btn.textContent='ফলাফল কপি করুন';
+  },1800);
+
+});
+
 calculate();
 </script>
+
 </body>
 </html>
